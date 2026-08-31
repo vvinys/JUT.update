@@ -1,0 +1,51 @@
+name: Deploy changelog site
+
+# ดึง appcast.xml ล่าสุดจาก release มา deploy คู่กับ index.html ไปที่ GitHub Pages
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published, edited, released]
+  workflow_dispatch:
+  schedule:
+    # เผื่อกรณีอัปโหลด asset ใหม่โดยไม่ได้ trigger event อื่น — เช็คทุก 6 ชั่วโมง
+    - cron: "0 */6 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# ให้ deploy ทีละงาน ไม่ยกเลิกงานที่รันอยู่
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch latest appcast.xml from release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+          # ดึง appcast.xml จาก release tag "jutupdate"
+          gh release download jutupdate --repo "${{ github.repository }}" \
+            --pattern appcast.xml --output _site/appcast.xml --clobber
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

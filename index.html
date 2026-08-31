@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jut — Changelog</title>
+<meta name="description" content="อัปเดตและประวัติเวอร์ชันทั้งหมดของ Jut สำหรับ Mac">
+<style>
+  :root {
+    --bg: #0b0b0f;
+    --bg-soft: #14141b;
+    --card: rgba(255,255,255,0.035);
+    --card-border: rgba(255,255,255,0.08);
+    --text: #f4f4f7;
+    --muted: #9a9aa6;
+    --faint: #6a6a76;
+    /* brand gradient (จากโลโก้ J) */
+    --g1: #FFCF97; --g2: #FF8158; --g3: #FF625F; --g4: #FF3F72; --g5: #E71E79;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,63,114,0.10), transparent 60%),
+      radial-gradient(900px 500px at 85% 10%, rgba(255,129,88,0.08), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+                 "Noto Sans Thai", "IBM Plex Sans Thai", Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 22px 120px; }
+
+  /* ---------- Header ---------- */
+  header {
+    text-align: center;
+    padding: 72px 0 46px;
+  }
+
+  .logo { width: 88px; height: 88px; margin: 0 auto 20px; display: block; }
+
+  h1 {
+    font-size: clamp(30px, 6vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, var(--g1), var(--g3) 45%, var(--g5));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  header p { color: var(--muted); margin-top: 10px; font-size: 16px; }
+
+  /* ---------- Timeline ---------- */
+  .timeline { position: relative; }
+
+  .release {
+    position: relative;
+    padding: 26px 26px 22px;
+    margin-bottom: 22px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .release.latest {
+    border-color: rgba(255,63,114,0.35);
+    box-shadow: 0 0 0 1px rgba(255,63,114,0.10), 0 20px 60px -30px rgba(255,63,114,0.5);
+  }
+
+  .rel-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-bottom: 16px;
+  }
+
+  .version {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .version .v-prefix { color: var(--faint); font-weight: 600; font-size: 18px; }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    background: linear-gradient(120deg, var(--g2), var(--g4));
+    color: #fff;
+  }
+
+  .meta {
+    margin-left: auto;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .meta span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+
+  /* ---------- Release notes body ---------- */
+  .notes { color: #dcdce4; font-size: 15px; }
+  .notes h1, .notes h2, .notes h3 { color: #fff; margin: 18px 0 8px; font-weight: 700; }
+  .notes h1 { font-size: 19px; } .notes h2 { font-size: 17px; } .notes h3 { font-size: 15px; }
+  .notes h1:first-child, .notes h2:first-child, .notes h3:first-child { margin-top: 0; }
+  .notes ul, .notes ol { padding-left: 22px; margin: 6px 0 12px; }
+  .notes li { margin: 4px 0; }
+  .notes p { margin: 8px 0; }
+  .notes a { color: var(--g4); text-decoration: none; border-bottom: 1px solid rgba(255,63,114,0.3); }
+  .notes a:hover { border-bottom-color: var(--g4); }
+  .notes code {
+    background: rgba(255,255,255,0.08); padding: 1px 6px;
+    border-radius: 6px; font-size: 0.9em;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  .notes img { max-width: 100%; border-radius: 12px; margin: 10px 0; }
+  .notes hr { border: none; border-top: 1px solid var(--card-border); margin: 16px 0; }
+
+  /* ---------- Download button ---------- */
+  .dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 9px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 12px;
+    background: linear-gradient(120deg, var(--g3), var(--g5));
+    transition: transform .12s ease, filter .12s ease;
+  }
+  .dl:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .dl:active { transform: translateY(0); }
+
+  /* ---------- States ---------- */
+  .state { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .spinner {
+    width: 34px; height: 34px; margin: 0 auto 18px;
+    border: 3px solid rgba(255,255,255,0.12);
+    border-top-color: var(--g4);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .state .retry {
+    display: inline-block; margin-top: 14px; color: var(--g4);
+    cursor: pointer; text-decoration: underline;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--faint);
+    font-size: 13px;
+    padding-top: 40px;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--g4); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <!-- โลโก้ J (static จาก jutlogo.html) -->
+    <svg class="logo" viewBox="17 30 176 178" aria-label="Jut logo">
+      <defs>
+        <linearGradient id="gJ" gradientUnits="userSpaceOnUse" x1="120" y1="40" x2="120" y2="200">
+          <stop offset="0"    stop-color="#FFCF97"/>
+          <stop offset="0.15" stop-color="#FFA86E"/>
+          <stop offset="0.34" stop-color="#FF8158"/>
+          <stop offset="0.52" stop-color="#FF625F"/>
+          <stop offset="0.70" stop-color="#FF3F72"/>
+          <stop offset="0.86" stop-color="#F82678"/>
+          <stop offset="1"    stop-color="#E71E79"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#gJ)" d="M106,64 L134,64 L134,150 C134,178 113,197 86,197
+        C62,197 43,182 38,159 A 14 14 0 0 1 65 151
+        C68,163 76,171 87,171 C99,171 106,162 106,149 Z"/>
+      <path fill="url(#gJ)" d="M80,42 H160 a7,7 0 0 1 7,7 V66 c0,6 -5,11 -11,11 H84 c-6,0 -11,-5 -11,-11 V49 a7,7 0 0 1 7,-7 Z"/>
+    </svg>
+    <h1>Changelog</h1>
+    <p>ประวัติการอัปเดตทั้งหมดของ Jut</p>
+  </header>
+
+  <main id="content" class="timeline">
+    <div class="state">
+      <div class="spinner"></div>
+      กำลังโหลดเวอร์ชัน…
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://github.com/vvinys" target="_blank" rel="noopener">Jut</a>
+    · อัปเดตอัตโนมัติจาก Sparkle appcast
+  </footer>
+
+</div>
+
+<script>
+  // อ่าน appcast.xml แบบ same-origin (GitHub Actions ก๊อปไฟล์นี้จาก release มาวางข้าง ๆ ตอน deploy).
+  // ทำแบบนี้เพราะ release asset ของ GitHub ไม่ส่ง CORS header จึง fetch ข้ามโดเมนตรง ๆ ไม่ได้.
+  const APPCAST_URL = "./appcast.xml";
+
+  const SPARKLE_NS = "http://www.andymatuschak.org/xml-namespaces/sparkle";
+  const content = document.getElementById("content");
+
+  const escapeHTML = (s) => s.replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function fmtDate(pubDate) {
+    if (!pubDate) return "";
+    const d = new Date(pubDate);
+    if (isNaN(d)) return "";
+    return d.toLocaleDateString("th-TH", { year: "numeric", month: "long", day: "numeric" });
+  }
+
+  function fmtSize(bytes) {
+    const n = parseInt(bytes, 10);
+    if (!n || isNaN(n)) return "";
+    const mb = n / (1024 * 1024);
+    return mb >= 1 ? mb.toFixed(1) + " MB" : Math.round(n / 1024) + " KB";
+  }
+
+  // sparkle:* ต้องอ่านผ่าน namespace เพราะบาง parser ไม่ยอมให้ query ด้วย prefix ตรง ๆ
+  const sparkleAttr = (enc, name) =>
+    enc?.getAttributeNS(SPARKLE_NS, name) || enc?.getAttribute("sparkle:" + name) || "";
+
+  function textOf(item, tag) {
+    // ลอง namespaced ก่อน แล้วค่อย fallback เป็นชื่อ tag ตรง ๆ
+    let el = item.getElementsByTagNameNS(SPARKLE_NS, tag)[0];
+    if (!el) el = item.getElementsByTagName("sparkle:" + tag)[0];
+    if (!el) el = item.getElementsByTagName(tag)[0];
+    return el ? el.textContent.trim() : "";
+  }
+
+  // ดึง release notes: ฝังใน <description> หรือ link ผ่าน <sparkle:releaseNotesLink>
+  async function getNotes(item) {
+    const desc = item.getElementsByTagName("description")[0];
+    if (desc && desc.textContent.trim()) return desc.textContent;
+
+    const link = textOf(item, "releaseNotesLink");
+    if (link) {
+      try {
+        const r = await fetch(link);
+        if (r.ok) return await r.text();
+      } catch (_) { /* ไม่มี notes ก็ปล่อยว่าง */ }
+    }
+    return "";
+  }
+
+  function versionKey(v) {
+    return (v || "0").split(/[.\-]/).map(n => parseInt(n, 10) || 0);
+  }
+  function compareVersions(a, b) {
+    const A = versionKey(a), B = versionKey(b);
+    const len = Math.max(A.length, B.length);
+    for (let i = 0; i < len; i++) {
+      const diff = (B[i] || 0) - (A[i] || 0);
+      if (diff) return diff;
+    }
+    return 0;
+  }
+
+  function renderError(msg) {
+    content.innerHTML = `
+      <div class="state">
+        โหลด changelog ไม่สำเร็จ<br>
+        <small style="color:var(--faint)">${escapeHTML(msg)}</small><br>
+        <span class="retry" onclick="load()">ลองใหม่</span>
+      </div>`;
+  }
+
+  async function load() {
+    content.innerHTML = `<div class="state"><div class="spinner"></div>กำลังโหลดเวอร์ชัน…</div>`;
+    let xmlText;
+    try {
+      const res = await fetch(APPCAST_URL, { cache: "no-cache" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      xmlText = await res.text();
+    } catch (e) {
+      return renderError(e.message || "network error");
+    }
+
+    const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+    if (doc.getElementsByTagName("parsererror").length) {
+      return renderError("appcast.xml ไม่ถูกต้อง");
+    }
+
+    const items = Array.from(doc.getElementsByTagName("item"));
+    if (!items.length) return renderError("ยังไม่มีเวอร์ชันใน appcast");
+
+    // เตรียมข้อมูลแต่ละเวอร์ชัน (รวมทั้งดึง notes ที่เป็น link)
+    const releases = await Promise.all(items.map(async (item) => {
+      const enc = item.getElementsByTagName("enclosure")[0];
+      const shortVer = textOf(item, "shortVersionString")
+        || sparkleAttr(enc, "shortVersionString");
+      const buildVer = textOf(item, "version") || sparkleAttr(enc, "version");
+      return {
+        short: shortVer || buildVer || "?",
+        build: buildVer && buildVer !== shortVer ? buildVer : "",
+        date: fmtDate(textOf(item, "pubDate") ||
+          (item.getElementsByTagName("pubDate")[0]?.textContent)),
+        minOS: textOf(item, "minimumSystemVersion"),
+        url: enc?.getAttribute("url") || "",
+        size: fmtSize(enc?.getAttribute("length")),
+        notes: await getNotes(item),
+      };
+    }));
+
+    releases.sort((a, b) => compareVersions(a.short, b.short));
+
+    content.innerHTML = releases.map((r, i) => `
+      <article class="release${i === 0 ? " latest" : ""}">
+        <div class="rel-head">
+          <span class="version">
+            <span class="v-prefix">v</span>${escapeHTML(r.short)}
+            ${r.build ? `<span class="v-prefix" style="font-size:14px">(${escapeHTML(r.build)})</span>` : ""}
+          </span>
+          ${i === 0 ? `<span class="badge">ล่าสุด</span>` : ""}
+          <span class="meta">
+            ${r.date ? `<span>📅 ${escapeHTML(r.date)}</span>` : ""}
+            ${r.minOS ? `<span>💻 macOS ${escapeHTML(r.minOS)}+</span>` : ""}
+            ${r.size ? `<span>⬇︎ ${escapeHTML(r.size)}</span>` : ""}
+          </span>
+        </div>
+        <div class="notes">${r.notes || "<p style='color:var(--faint)'>ไม่มีรายละเอียดการอัปเดต</p>"}</div>
+        ${r.url ? `<a class="dl" href="${escapeHTML(r.url)}">ดาวน์โหลดเวอร์ชันนี้</a>` : ""}
+      </article>
+    `).join("");
+  }
+
+  load();
+</script>
+</body>
+</html>
