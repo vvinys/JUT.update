@@ -36,8 +36,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p _site
-          cp index.html _site/index.html
-          # ดึง appcast.xml จาก release tag "jutupdate"
+          # copy the static site files (page + icon)
+          cp index.html icon.png _site/
+          # pull the latest appcast.xml from the "jutupdate" release
           gh release download jutupdate --repo "${{ github.repository }}" \
             --pattern appcast.xml --output _site/appcast.xml --clobber
 
