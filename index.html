@@ -7,15 +7,16 @@
 <meta name="description" content="Every update to Jut for Mac, in one place.">
 <style>
   :root {
-    --bg: #0b0b0f;
-    --bg-soft: #14141b;
+    --bg: #0a0a0c;
+    --bg-soft: #131316;
     --card: rgba(255,255,255,0.035);
     --card-border: rgba(255,255,255,0.08);
     --text: #f4f4f7;
     --muted: #9a9aa6;
     --faint: #6a6a76;
-    /* brand gradient (from the app icon) */
-    --g1: #FFCF97; --g2: #FF8158; --g3: #FF625F; --g4: #FF3F72; --g5: #E71E79;
+    /* silver palette (matches the glass app icon) */
+    --g1: #FFFFFF; --g2: #E6E8EC; --g3: #BFC3CA; --g4: #D4D7DD; --g5: #8C9098;
+    --accent-line: rgba(220,224,232,0.28);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,8 +25,8 @@
 
   body {
     background:
-      radial-gradient(1200px 600px at 50% -10%, rgba(255,63,114,0.10), transparent 60%),
-      radial-gradient(900px 500px at 85% 10%, rgba(255,129,88,0.08), transparent 55%),
+      radial-gradient(1200px 600px at 50% -10%, rgba(220,224,232,0.08), transparent 60%),
+      radial-gradient(900px 500px at 85% 10%, rgba(180,186,196,0.05), transparent 55%),
       var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
@@ -45,14 +46,14 @@
   .logo {
     width: 96px; height: 96px; margin: 0 auto 22px; display: block;
     border-radius: 22px;
-    filter: drop-shadow(0 14px 40px rgba(255,63,114,0.28));
+    filter: drop-shadow(0 14px 40px rgba(200,206,216,0.22));
   }
 
   h1 {
     font-size: clamp(30px, 6vw, 46px);
     font-weight: 800;
     letter-spacing: -0.02em;
-    background: linear-gradient(120deg, var(--g1), var(--g3) 45%, var(--g5));
+    background: linear-gradient(120deg, var(--g1) 0%, var(--g3) 40%, var(--g1) 60%, var(--g5) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -75,8 +76,8 @@
   }
 
   .release.latest {
-    border-color: rgba(255,63,114,0.35);
-    box-shadow: 0 0 0 1px rgba(255,63,114,0.10), 0 20px 60px -30px rgba(255,63,114,0.5);
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 1px rgba(220,224,232,0.06), 0 20px 60px -30px rgba(200,206,216,0.35);
   }
 
   .rel-head {
@@ -103,8 +104,8 @@
     padding: 3px 10px;
     border-radius: 999px;
     letter-spacing: 0.02em;
-    background: linear-gradient(120deg, var(--g2), var(--g4));
-    color: #fff;
+    background: linear-gradient(120deg, var(--g1), var(--g3));
+    color: #1a1b1e;
   }
 
   .meta {
@@ -125,7 +126,7 @@
   .notes ul, .notes ol { padding-left: 22px; margin: 6px 0 12px; }
   .notes li { margin: 4px 0; }
   .notes p { margin: 8px 0; }
-  .notes a { color: var(--g4); text-decoration: none; border-bottom: 1px solid rgba(255,63,114,0.3); }
+  .notes a { color: var(--g4); text-decoration: none; border-bottom: 1px solid var(--accent-line); }
   .notes a:hover { border-bottom-color: var(--g4); }
   .notes code {
     background: rgba(255,255,255,0.08); padding: 1px 6px;
