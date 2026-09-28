@@ -135,24 +135,6 @@
   .notes img { max-width: 100%; border-radius: 12px; margin: 10px 0; }
   .notes hr { border: none; border-top: 1px solid var(--card-border); margin: 16px 0; }
 
-  /* ---------- Download button ---------- */
-  .dl {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 18px;
-    padding: 9px 18px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 12px;
-    background: linear-gradient(120deg, var(--g3), var(--g5));
-    transition: transform .12s ease, filter .12s ease;
-  }
-  .dl:hover { transform: translateY(-1px); filter: brightness(1.08); }
-  .dl:active { transform: translateY(0); }
-
   /* ---------- States ---------- */
   .state { text-align: center; padding: 60px 20px; color: var(--muted); }
   .spinner {
@@ -307,7 +289,6 @@
         date: fmtDate(textOf(item, "pubDate") ||
           (item.getElementsByTagName("pubDate")[0]?.textContent)),
         minOS: textOf(item, "minimumSystemVersion"),
-        url: enc?.getAttribute("url") || "",
         size: fmtSize(enc?.getAttribute("length")),
         notes: await getNotes(item),
       };
@@ -324,13 +305,12 @@
           </span>
           ${i === 0 ? `<span class="badge">Latest</span>` : ""}
           <span class="meta">
-            ${r.date ? `<span>📅 ${escapeHTML(r.date)}</span>` : ""}
-            ${r.minOS ? `<span>💻 macOS ${escapeHTML(r.minOS)}+</span>` : ""}
-            ${r.size ? `<span>⬇︎ ${escapeHTML(r.size)}</span>` : ""}
+            ${r.date ? `<span> ${escapeHTML(r.date)}</span>` : ""}
+            ${r.minOS ? `<span> macOS ${escapeHTML(r.minOS)}+</span>` : ""}
+            ${r.size ? `<span> ${escapeHTML(r.size)}</span>` : ""}
           </span>
         </div>
         <div class="notes">${r.notes || "<p style='color:var(--faint)'>No release notes for this version.</p>"}</div>
-        ${r.url ? `<a class="dl" href="${escapeHTML(r.url)}">Download</a>` : ""}
       </article>
     `).join("");
   }
