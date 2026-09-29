@@ -196,6 +196,43 @@
   const escapeHTML = (s) => s.replace(/[&<>"']/g, c =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  // Minimal markdown → HTML for release notes (headings, bullets, bold/italic, code, links).
+  // Everything is escaped first, so notes can never inject markup.
+  function inlineMD(s) {
+    return escapeHTML(s)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+
+  function renderMarkdown(md) {
+    const out = [];
+    let list = null;
+    const closeList = () => { if (list) { out.push(`</${list}>`); list = null; } };
+    for (const raw of md.replace(/\r/g, "").split("\n")) {
+      const line = raw.trim();
+      let m;
+      if (!line) { closeList(); continue; }
+      if ((m = line.match(/^(#{1,6})\s+(.*)$/))) {
+        closeList();
+        const lvl = Math.min(m[1].length, 3);
+        out.push(`<h${lvl}>${inlineMD(m[2])}</h${lvl}>`);
+      } else if ((m = line.match(/^[-*+]\s+(.*)$/)) || (m = line.match(/^\d+[.)]\s+(.*)$/))) {
+        const want = /^\d/.test(line) ? "ol" : "ul";
+        if (list !== want) { closeList(); out.push(`<${want}>`); list = want; }
+        out.push(`<li>${inlineMD(m[1])}</li>`);
+      } else if (/^(-{3,}|\*{3,})$/.test(line)) {
+        closeList(); out.push("<hr>");
+      } else {
+        closeList(); out.push(`<p>${inlineMD(line)}</p>`);
+      }
+    }
+    closeList();
+    return out.join("");
+  }
+
   function fmtDate(pubDate) {
     if (!pubDate) return "";
     const d = new Date(pubDate);
@@ -311,7 +348,7 @@
             ${r.size ? `<span> ${escapeHTML(r.size)}</span>` : ""}
           </span>
         </div>
-        <div class="notes">${r.notes || "<p style='color:var(--faint)'>No release notes for this version.</p>"}</div>
+        <div class="notes">${r.notes.trim() ? renderMarkdown(r.notes) : "<p style='color:var(--faint)'>No release notes for this version.</p>"}</div>
       </article>
     `).join("");
   }
